@@ -60,8 +60,7 @@ python src/pca_index.py   # Estimate yield curve
 ## Theoretical Background
 ### **1. Nelson-Siegel-Svensson (NSS) Model**
 The NSS model expresses instantaneous forward rates using a functional form:
-
-$$ \text f(n) = \beta_1 + \beta_2 e^{-n/\tau_1} + \beta_3\left(\frac{n}{\tau_1}\right)e^{-n/\tau_1} + \beta_4\left(\frac{n}{\tau_2}\right)e^{-n/\tau_2} $$
+![Equation](https://latex.codecogs.com/png.latex?f(n)%20=%20\beta_1%20+%20\beta_2%20e^{-n/\tau_1}%20+%20\beta_3\left(\frac{n}{\tau_1}\right)e^{-n/\tau_1}%20+%20\beta_4\left(\frac{n}{\tau_2}\right)e^{-n/\tau_2})
 where:
 - \( \beta_1 \) is the long-term asymptotic rate.
 - \( \beta_2, \beta_3, \beta_4 \) control the shape of the yield curve.
