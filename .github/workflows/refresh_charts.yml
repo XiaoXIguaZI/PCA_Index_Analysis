@@ -14,10 +14,12 @@ jobs:
     - uses: actions/checkout@v4
       with:
         ref: 'gh-actions-update'
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
+
     - name: Cache Python environment
       id: cache-python-env
       uses: actions/cache@v3
@@ -26,17 +28,28 @@ jobs:
         key: ${{ runner.os }}-venv-${{ hashFiles('**/requirements.txt', '**/.python-version') }}
         restore-keys: |
           ${{ runner.os }}-venv-
+
     - name: Install Python environment
-      if: steps.cache-python-env.outputs.cache-hit != 'true'
       run: |
         python -m venv .venv
         source .venv/bin/activate
+        pip install --upgrade pip
         pip install -r requirements.txt
+        pip install doit  # 确保 doit 被安装
+
+    - name: Debug virtual environment
+      run: |
+        source .venv/bin/activate
+        which python
+        which doit
+        python -c "import doit; print(doit.__version__)"
+
     - name: Run project code
       run: |
         source .venv/bin/activate
-        doit
+        python -m doit  # 直接用 Python 运行 doit，确保不会找不到命令
         cp -r ./docs/_build/html/* ./docs/
+
     - name: Commit changes
       uses: EndBug/add-and-commit@v9
       with:
