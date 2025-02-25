@@ -60,7 +60,9 @@ python src/pca_index.py   # Estimate yield curve
 ## Theoretical Background
 ### **1. Nelson-Siegel-Svensson (NSS) Model**
 The NSS model expresses instantaneous forward rates using a functional form:
+```latex
 f(n) = \beta_1 + \beta_2 e^{-n/\tau_1} + \beta_3\left(\frac{n}{\tau_1}\right)e^{-n/\tau_1} + \beta_4\left(\frac{n}{\tau_2}\right)e^{-n/\tau_2}
+```
 where:
 - \( \beta_1 \) is the long-term asymptotic rate.
 - \( \beta_2, \beta_3, \beta_4 \) control the shape of the yield curve.
@@ -76,9 +78,9 @@ The replication follows GSW2005’s filtering process:
 
 ### **3. Curve Fitting**
 The model minimizes the weighted squared error between observed and estimated prices:
-\[
+```latex
 \min_{\beta,\tau} \sum_{i=1}^N \frac{(P_i^{obs} - P_i^{model})^2}{D_i}
-\]
+```
 where:
 - \( P_i^{obs} \) = Observed clean price.
 - \( P_i^{model} \) = Model-implied price.
