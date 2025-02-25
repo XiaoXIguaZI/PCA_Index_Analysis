@@ -1,192 +1,106 @@
-Replicating GSW2005 Yield Curve
+PCA Index Analysis
 ==================
 
-## Overview
-This project replicates the methodology of Gürkaynak, Sack, and Wright (2005) (GSW2005) for estimating the U.S. Treasury yield curve. The implementation follows their data filtering process, curve estimation techniques, and error minimization approach.
-(HW4 for Data Science Tools 
 
+# Overview
 
-## Features
-- **Data Filtering:** Applies GSW filtering rules to CRSP Treasury data.
-- **Nelson-Siegel-Svensson (NSS) Model:** Implements the yield curve estimation model.
-- **Yield Curve Visualization:** Produces fitted yield curves and forward rate structures.
-- **Performance Comparison:** Compares results against Federal Reserve published yields.
+This project provides a framework for constructing a **Principal Component Analysis (PCA) index** using economic data from the Federal Reserve Economic Data (FRED). It includes data preprocessing, PCA computation, and visualization.
+Assignment 4 for Data Science Tools for Finance, by Dr. Jeremy Bejarano
 
-## Installation
-Ensure you have Python installed and set up the environment:
-```bash
-conda env create -f environment.yml
-conda activate hw4_env
-```
-Or install manually:
-```bash
-pip install -r requirements.txt
-```
+## 📖 Mathematical Background
 
-## Usage
-### Running Jupyter Notebooks
-Navigate to the `src/` directory and run:
-```bash
-jupyter notebook
-```
-Open `02_replicate_GSW2005.ipynb` to execute the yield curve replication.
+### Principal Component Analysis (PCA)
+PCA is a dimensionality reduction technique that transforms correlated variables into a set of uncorrelated components (principal components). The transformation is defined as follows:
 
-### Running the Analysis
-```bash
-python src/load_fred.py  # Load data
-python src/pca_index.py   # Estimate yield curve
-```
-
-## Project Structure
-```
-├── assets                 # Project assets (e.g., logos)
-├── data/manual            # Data folder for manual input files
-├── docs                   # Documentation files
-│   ├── api.rst            # API documentation
-│   ├── conf.py            # Sphinx config file
-│   ├── index.rst          # Main documentation index
-│   ├── myst_markdown_demos.md
-├── src                    # Source code and notebooks
-│   ├── 01_CRSP_treasury_overview.ipynb
-│   ├── 02_replicate_GSW2005.ipynb
-│   ├── config.py
-│   ├── load_fred.py       # Data loading script for FRED dataset
-│   ├── misc_tools.py      # Miscellaneous helper functions
-│   ├── pca_index.py       # Yield curve estimation implementation
-│   ├── test_misc_tools.py # Unit tests for misc_tools
-├── environment.yml        # Conda environment setup
-├── requirements.txt       # Python dependencies
-├── pyproject.toml         # Project configuration
-```
-
-## Theoretical Background
-### **1. Nelson-Siegel-Svensson (NSS) Model**
-![Equation](https://latex.codecogs.com/png.latex?f(n)%20=%20eta_1%20+%20eta_2%20e^{-n/	au_1}%20+%20eta_3\left(rac{n}{	au_1}
-ight)e^{-n/	au_1}%20+%20eta_4\left(rac{n}{	au_2}
-ight)e^{-n/	au_2})
+![Equation](https://latex.codecogs.com/png.latex?X%20%3D%20U%20%5CSigma%20V%5ET)
 
 where:
+- ![Equation](https://latex.codecogs.com/png.latex?X) is the standardized data matrix,
+- ![Equation](https://latex.codecogs.com/png.latex?U) is the left singular matrix (eigenvectors of ![Equation](https://latex.codecogs.com/png.latex?XX%5ET)),
+- ![Equation](https://latex.codecogs.com/png.latex?%5CSigma) is the diagonal matrix of singular values,
+- ![Equation](https://latex.codecogs.com/png.latex?V) is the right singular matrix (eigenvectors of ![Equation](https://latex.codecogs.com/png.latex?X%5ETX)).
 
-- ![Beta1](https://latex.codecogs.com/png.latex?eta_1) represents the long-term asymptotic rate.
-- ![Beta2](https://latex.codecogs.com/png.latex?eta_2), ![Beta3](https://latex.codecogs.com/png.latex?eta_3), and ![Beta4](https://latex.codecogs.com/png.latex?eta_4) control the shape of the yield curve.
-- ![Tau1](https://latex.codecogs.com/png.latex?	au_1) and ![Tau2](https://latex.codecogs.com/png.latex?	au_2) determine the decay speed of the factors.
+The first few principal components capture most of the variance in the data, making PCA useful for constructing economic indices.
 
-### **2. Data Filtering (GSW Methodology)**
-The replication follows GSW2005’s filtering process:
-- Excludes securities with <3 months to maturity.
-- Excludes on-the-run and first off-the-run issues after 1980.
-- Excludes T-bills (only notes and bonds are considered).
-- Excludes 20-year bonds after 1996 with a gradual decay rule.
-- Excludes callable bonds.
+## 🏗️ Project Structure
 
-### **3. Curve Fitting**
-![Equation](https://latex.codecogs.com/png.latex?\min_{eta,	au}%20\sum_{i=1}^N%20rac{(P_i^{obs}%20-%20P_i^{model})^2}{D_i})
-
-where:
-
-- ![P_obs](https://latex.codecogs.com/png.latex?P_i^{obs}) is the observed clean price.
-- ![P_model](https://latex.codecogs.com/png.latex?P_i^{model}) is the model-implied price.
-- ![D_i](https://latex.codecogs.com/png.latex?D_i) is the duration of security ![i](https://latex.codecogs.com/png.latex?i).
-
-### **4. Performance Evaluation**
-The implementation compares fitted yields against Federal Reserve GSW yields to assess accuracy.
-
-## Contributing
-Feel free to fork and submit pull requests!
-
-## License
-MIT License# HW4: Replicating GSW2005 Yield Curve
-
-## Overview
-This project replicates the methodology of Gürkaynak, Sack, and Wright (2005) (GSW2005) for estimating the U.S. Treasury yield curve. The implementation follows their data filtering process, curve estimation techniques, and error minimization approach.
-
-## Features
-- **Data Filtering:** Applies GSW filtering rules to CRSP Treasury data.
-- **Nelson-Siegel-Svensson (NSS) Model:** Implements the yield curve estimation model.
-- **Yield Curve Visualization:** Produces fitted yield curves and forward rate structures.
-- **Performance Comparison:** Compares results against Federal Reserve published yields.
-
-## Installation
-Ensure you have Python installed and set up the environment:
-```bash
-conda env create -f environment.yml
-conda activate hw4_env
 ```
-Or install manually:
-```bash
-pip install -r requirements.txt
+├── README.md
+├── assets
+│   └── logo.png
+├── data
+│   └── manual
+├── docs
+│   ├── api.rst
+│   ├── conf.py
+│   ├── index.rst
+│   └── myst_markdown_demos.md
+├── dodo.py
+├── env.example
+├── env.example_alt
+├── environment.yml
+├── pyproject.toml
+├── requirements.txt
+└── src
+    ├── 01_example_notebook.ipynb
+    ├── 02_pca_index_visualizations.ipynb
+    ├── 03_pca_index_dashboard.ipynb
+    ├── config.py
+    ├── factor_analysis_demo.ipynb
+    ├── load_fred.py
+    ├── misc_tools.py
+    ├── pca_index.py
+    └── test_misc_tools.py
 ```
 
-## Usage
-### Running Jupyter Notebooks
-Navigate to the `src/` directory and run:
-```bash
-jupyter notebook
-```
-Open `02_replicate_GSW2005.ipynb` to execute the yield curve replication.
+## 🔄 Workflow
 
-### Running the Analysis
-```bash
-python src/load_fred.py  # Load data
-python src/pca_index.py   # Estimate yield curve
-```
+### 1. Load Economic Data
+- `load_fred.py` fetches macroeconomic and financial series from FRED.
+- The dataset includes variables such as interest rates, GDP, stock indices, and credit spreads.
 
-## Project Structure
-```
-├── assets                 # Project assets (e.g., logos)
-├── data/manual            # Data folder for manual input files
-├── docs                   # Documentation files
-│   ├── api.rst            # API documentation
-│   ├── conf.py            # Sphinx config file
-│   ├── index.rst          # Main documentation index
-│   ├── myst_markdown_demos.md
-├── src                    # Source code and notebooks
-│   ├── 01_CRSP_treasury_overview.ipynb
-│   ├── 02_replicate_GSW2005.ipynb
-│   ├── config.py
-│   ├── load_fred.py       # Data loading script for FRED dataset
-│   ├── misc_tools.py      # Miscellaneous helper functions
-│   ├── pca_index.py       # Yield curve estimation implementation
-│   ├── test_misc_tools.py # Unit tests for misc_tools
-├── environment.yml        # Conda environment setup
-├── requirements.txt       # Python dependencies
-├── pyproject.toml         # Project configuration
+### 2. Data Preprocessing
+- `misc_tools.py` contains helper functions to clean, merge, and standardize the data.
+- Standardization is performed using:
+  ![Equation](https://latex.codecogs.com/png.latex?x%27%20%3D%20%5Cfrac%7Bx%20-%20%5Cmu%7D%7B%5Csigma%7D)
+  
+  where ![Equation](https://latex.codecogs.com/png.latex?%5Cmu) is the mean and ![Equation](https://latex.codecogs.com/png.latex?%5Csigma) is the standard deviation.
+
+### 3. Principal Component Analysis
+- `pca_index.py` computes the PCA transformation on standardized economic indicators.
+- Uses **scikit-learn's PCA** and **Statsmodels' multivariate PCA**.
+- Outputs principal components and their explained variance.
+
+### 4. Visualization & Interpretation
+- Notebooks (`02_pca_index_visualizations.ipynb`, `03_pca_index_dashboard.ipynb`) generate plots for:
+  - Eigenvalues and explained variance
+  - Factor loadings for each economic variable
+  - Interactive dashboards using **Plotly**
+
+## 🚀 Running the Project
+
+### Installation
+Ensure dependencies are installed:
+```sh
+conda env create -f environment.yml  # Using Conda
+pip install -r requirements.txt       # Using pip
 ```
 
-## Theoretical Background
-### **1. Nelson-Siegel-Svensson (NSS) Model**
-![Equation](https://latex.codecogs.com/png.latex?f(n)%20=%20eta_1%20+%20eta_2%20e^{-n/	au_1}%20+%20eta_3\left(rac{n}{	au_1}
-ight)e^{-n/	au_1}%20+%20eta_4\left(rac{n}{	au_2}
-ight)e^{-n/	au_2})
+### Running Analysis
+Run the data processing and PCA index computation:
+```sh
+python src/load_fred.py    # Download economic data
+python src/pca_index.py    # Compute PCA index
+```
 
-where:
+### Visualization
+Open Jupyter Notebooks for interactive visualizations:
+```sh
+jupyter notebook src/02_pca_index_visualizations.ipynb
+```
 
-- ![Beta1](https://latex.codecogs.com/png.latex?eta_1) represents the long-term asymptotic rate.
-- ![Beta2](https://latex.codecogs.com/png.latex?eta_2), ![Beta3](https://latex.codecogs.com/png.latex?eta_3), and ![Beta4](https://latex.codecogs.com/png.latex?eta_4) control the shape of the yield curve.
-- ![Tau1](https://latex.codecogs.com/png.latex?	au_1) and ![Tau2](https://latex.codecogs.com/png.latex?	au_2) determine the decay speed of the factors.
+## 📊 Output & Insights
+- **PCA Economic Index**: A composite indicator capturing the main economic trends.
+- **Factor Analysis**: Identifies macroeconomic variables that drive market movements.
+- **Dynamic Dashboard**: Provides an interactive interface to explore PCA results.
 
-### **2. Data Filtering (GSW Methodology)**
-The replication follows GSW2005’s filtering process:
-- Excludes securities with <3 months to maturity.
-- Excludes on-the-run and first off-the-run issues after 1980.
-- Excludes T-bills (only notes and bonds are considered).
-- Excludes 20-year bonds after 1996 with a gradual decay rule.
-- Excludes callable bonds.
-
-### **3. Curve Fitting**
-![Equation](https://latex.codecogs.com/png.latex?\min_{eta,	au}%20\sum_{i=1}^N%20rac{(P_i^{obs}%20-%20P_i^{model})^2}{D_i})
-
-where:
-
-- ![P_obs](https://latex.codecogs.com/png.latex?P_i^{obs}) is the observed clean price.
-- ![P_model](https://latex.codecogs.com/png.latex?P_i^{model}) is the model-implied price.
-- ![D_i](https://latex.codecogs.com/png.latex?D_i) is the duration of security ![i](https://latex.codecogs.com/png.latex?i).
-
-### **4. Performance Evaluation**
-The implementation compares fitted yields against Federal Reserve GSW yields to assess accuracy.
-
-## Contributing
-Feel free to fork and submit pull requests!
-
-## License
-MIT License
